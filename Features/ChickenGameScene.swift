@@ -5,8 +5,9 @@ class ChickenGameScene: SKScene {
     var chicken: SKSpriteNode!
     let audioManager = AudioManager()
     private var isGameRunning = false
-    
+
     var completionHandler: ((_ didWin: Bool) -> Void)?
+    var permissionDeniedHandler: (() -> Void)?
     
     var lastTileX: CGFloat = 0
     var worldNode = SKNode()
@@ -29,16 +30,25 @@ class ChickenGameScene: SKScene {
     
     func startGame() {
         guard !isGameRunning else { return }
-        isGameRunning = true
-        chicken.physicsBody?.isDynamic = true
-        
-        audioManager.onLoudSound = { [weak self] db in
-            self?.handleSound(db: db)
+
+        audioManager.requestPermission { [weak self] granted in
+            guard let self = self else { return }
+            guard granted else {
+                self.permissionDeniedHandler?()
+                return
+            }
+
+            self.isGameRunning = true
+            self.chicken.physicsBody?.isDynamic = true
+
+            self.audioManager.onLoudSound = { [weak self] db in
+                self?.handleSound(db: db)
+            }
+            self.audioManager.startMonitoring()
+
+            // Небольшой стартовый импульс
+            self.handleSound(db: -15)
         }
-        audioManager.startMonitoring()
-        
-        // Небольшой стартовый импульс
-        handleSound(db: -15)
     }
     
     // MARK: - Анимация
