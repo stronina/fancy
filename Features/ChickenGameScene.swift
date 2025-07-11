@@ -142,7 +142,7 @@ class ChickenGameScene: SKScene {
     
     func setupChicken(isDynamic: Bool) {
         chicken = SKSpriteNode(imageNamed: "chicken_1")
-        chicken.position = CGPoint(x: frame.minX + 100, y: frame.midY - 80)
+        chicken.position = CGPoint(x: frame.midX - 150, y: frame.midY - 80)
         chicken.zPosition = 1
         chicken.setScale(0.08)
         
@@ -169,11 +169,14 @@ class ChickenGameScene: SKScene {
     }
     
     func spawnInitialBridge() {
-        for i in 0..<10 {
+        // Place tiles starting from slightly behind the chicken to
+        // ensure there is ground immediately under and in front of it
+        let initialTiles = 10
+        for i in -1..<(initialTiles - 1) {
             let x = chicken.position.x + CGFloat(i * 60)
             spawnBridgeTile(at: x, force: true)
         }
-        lastTileX = chicken.position.x + CGFloat(10 * 60)
+        lastTileX = chicken.position.x + CGFloat((initialTiles - 1) * 60)
     }
     
     func moveForward(by distance: CGFloat) {
