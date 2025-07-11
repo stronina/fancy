@@ -9,6 +9,7 @@ struct ChickenGameWrapperView: View {
     @State private var gameState: ChickenGameFlowState = .ready
     @State private var gameID = UUID()
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var gameManager: GameManager
 
     // MARK: – Theme Colors
     private let lightBlue: Color = .backgroundColor
@@ -56,6 +57,7 @@ struct ChickenGameWrapperView: View {
                             darkGreen: darkGreen
                         )
                         .onAppear {
+                            gameManager.complete(level: 3)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                 dismiss()
                             }
