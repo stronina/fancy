@@ -4,11 +4,17 @@ import SpriteKit
 struct ChickenGameView: UIViewRepresentable {
     let size: CGSize
     @Binding var gameState: ChickenGameFlowState
+    @Binding var stepCount: Int
     
     func makeUIView(context: Context) -> SKView {
         let skView = SKView()
         let scene = ChickenGameScene(size: size)
         scene.scaleMode = .resizeFill
+        scene.stepUpdateHandler = { count in
+            DispatchQueue.main.async {
+                stepCount = count
+            }
+        }
         
         // Связываем scene с нашим gameState
         scene.completionHandler = { didWin in
