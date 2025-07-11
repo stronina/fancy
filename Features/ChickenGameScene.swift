@@ -5,6 +5,7 @@ class ChickenGameScene: SKScene {
     var chicken: SKSpriteNode!
     let audioManager = AudioManager()
     private var isGameRunning = false
+    private var background: SKSpriteNode?
     
     var completionHandler: ((_ didWin: Bool) -> Void)?
     
@@ -133,11 +134,19 @@ class ChickenGameScene: SKScene {
     
     // MARK: - Setup методы
     func setupBackground() {
-        let bg = SKSpriteNode(imageNamed: "bg_hills_sky")
-        bg.position = CGPoint(x: frame.midX, y: frame.midY)
-        bg.size = self.size
-        bg.zPosition = -1
-        addChild(bg)
+        if background == nil {
+            background = SKSpriteNode(imageNamed: "bg_hills_sky")
+            background!.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            background!.zPosition = -1
+            addChild(background!)
+        }
+        background!.position = CGPoint(x: frame.midX, y: frame.midY)
+        background!.size = self.size
+    }
+
+    override func didChangeSize(_ oldSize: CGSize) {
+        super.didChangeSize(oldSize)
+        setupBackground()
     }
     
     func setupChicken(isDynamic: Bool) {
