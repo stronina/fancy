@@ -9,6 +9,7 @@ struct BugGameWrapperView: View {
     @State private var gameState: BugGameFlowState = .ready
     @State private var gameID = UUID()
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var gameManager: GameManager
 
     // MARK: – Theme Colors
     private let lightBlue: Color = .backgroundColor
@@ -39,6 +40,7 @@ struct BugGameWrapperView: View {
                             darkGreen: darkGreen
                         )
                         .onAppear {
+                            gameManager.complete(level: 4)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 dismiss()
                             }
