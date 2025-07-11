@@ -8,6 +8,7 @@ struct ChickenGameWrapperView: View {
     // MARK: – Game State
     @State private var gameState: ChickenGameFlowState = .ready
     @State private var gameID = UUID()
+    @State private var showMicAlert = false
     @Environment(\.dismiss) private var dismiss
 
     // MARK: – Theme Colors
@@ -19,7 +20,11 @@ struct ChickenGameWrapperView: View {
             GeometryReader { geometry in
                 ChickenGameView(
                     size: geometry.size,
-                    gameState: $gameState
+                    gameState: $gameState,
+                    onPermissionDenied: {
+                        showMicAlert = true
+                        gameState = .ready
+                    }
                 )
                 .id(gameID)
             }
@@ -72,6 +77,11 @@ struct ChickenGameWrapperView: View {
                 }
                 Spacer()
             }
+        }
+        .alert("Нет доступа к микрофону", isPresented: $showMicAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Для игры требуется доступ к микрофону. Разрешите его в настройках.")
         }
     }
 }

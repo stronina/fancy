@@ -4,18 +4,20 @@ import SpriteKit
 struct ChickenGameView: UIViewRepresentable {
     let size: CGSize
     @Binding var gameState: ChickenGameFlowState
+    var onPermissionDenied: () -> Void = {}
     
     func makeUIView(context: Context) -> SKView {
         let skView = SKView()
         let scene = ChickenGameScene(size: size)
         scene.scaleMode = .resizeFill
-        
+
         // Связываем scene с нашим gameState
         scene.completionHandler = { didWin in
             DispatchQueue.main.async {
                 gameState = .gameOver(didWin: didWin)
             }
         }
+        scene.permissionDeniedHandler = onPermissionDenied
         
         skView.presentScene(scene)
         context.coordinator.scene = scene
