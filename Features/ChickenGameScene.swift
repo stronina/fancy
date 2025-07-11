@@ -13,7 +13,7 @@ class ChickenGameScene: SKScene {
     var worldNode = SKNode()
     var hasReachedCenter = false
     var stepCount = 0
-    var targetSteps = 100
+    var targetSteps = 1000
     var scoreLabel: SKLabelNode!
     var totalGapsGenerated = 5
 
