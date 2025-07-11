@@ -8,6 +8,7 @@ struct BugGameWrapperView: View {
     // MARK: – Game State
     @State private var gameState: BugGameFlowState = .ready
     @State private var gameID = UUID()
+    @EnvironmentObject private var gameManager: GameManager
     @Environment(\.dismiss) private var dismiss
 
     // MARK: – Theme Colors
@@ -34,15 +35,16 @@ struct BugGameWrapperView: View {
 
                 case .gameOver(let didWin):
                     if didWin {
-                        BugVictoryView(
-                            lightBlue: lightBlue,
-                            darkGreen: darkGreen
-                        )
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                dismiss()
-                            }
+                    BugVictoryView(
+                        lightBlue: lightBlue,
+                        darkGreen: darkGreen
+                    )
+                    .onAppear {
+                        gameManager.complete(level: 4)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            dismiss()
                         }
+                    }
                     } else {
                         BugGameOverView(
                             lightBlue: lightBlue,
@@ -206,5 +208,6 @@ struct BugGameOverView: View {
 
 #Preview {
     BugGameWrapperView()
+        .environmentObject(GameManager())
 }
 

@@ -8,6 +8,7 @@ struct ChickenGameWrapperView: View {
     // MARK: – Game State
     @State private var gameState: ChickenGameFlowState = .ready
     @State private var gameID = UUID()
+    @EnvironmentObject private var gameManager: GameManager
     @Environment(\.dismiss) private var dismiss
 
     // MARK: – Theme Colors
@@ -51,15 +52,16 @@ struct ChickenGameWrapperView: View {
 
                 case .gameOver(let didWin):
                     if didWin {
-                        ChickenVictoryView(
-                            lightBlue: lightBlue,
-                            darkGreen: darkGreen
-                        )
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                                dismiss()
-                            }
+                    ChickenVictoryView(
+                        lightBlue: lightBlue,
+                        darkGreen: darkGreen
+                    )
+                    .onAppear {
+                        gameManager.complete(level: 3)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            dismiss()
                         }
+                    }
                     } else {
                         ChickenGameOverView(
                             lightBlue: lightBlue,
@@ -213,5 +215,6 @@ struct ChickenGameOverView: View {
 
 #Preview {
     ChickenGameWrapperView()
+        .environmentObject(GameManager())
 }
 
