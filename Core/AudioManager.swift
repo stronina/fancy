@@ -20,7 +20,7 @@ class AudioManager {
             let avg = sqrt(sum / Float(buffer.frameLength))
             let db = 20 * log10(avg)
 
-            if db > -50 {
+            if db > -30 {
                 DispatchQueue.main.async {
                     self?.onLoudSound?(db)
                 }

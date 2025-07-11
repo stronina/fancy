@@ -7,6 +7,7 @@ class ChickenGameScene: SKScene {
     private var isGameRunning = false
     
     var completionHandler: ((_ didWin: Bool) -> Void)?
+    var stepUpdateHandler: ((Int) -> Void)?
     
     var lastTileX: CGFloat = 0
     var worldNode = SKNode()
@@ -91,6 +92,7 @@ class ChickenGameScene: SKScene {
         
         stepCount += 1
         scoreLabel.text = "Шагов: \(stepCount) / \(targetSteps)"
+        stepUpdateHandler?(stepCount)
         
         if stepCount >= targetSteps {
             triggerVictory()
@@ -142,9 +144,11 @@ class ChickenGameScene: SKScene {
     
     func setupChicken(isDynamic: Bool) {
         chicken = SKSpriteNode(imageNamed: "chicken_1")
-        chicken.position = CGPoint(x: frame.minX + 100, y: frame.midY - 80)
+        chicken.setScale(0.2)
+        let tileHeight: CGFloat = 20
+        let startY = frame.midY - 100 + tileHeight / 2 + chicken.size.height / 2
+        chicken.position = CGPoint(x: frame.minX + 100, y: startY)
         chicken.zPosition = 1
-        chicken.setScale(0.08)
         
         chicken.physicsBody = SKPhysicsBody(rectangleOf: chicken.size)
         chicken.physicsBody?.isDynamic = isDynamic
@@ -161,7 +165,7 @@ class ChickenGameScene: SKScene {
     func setupScoreLabel() {
         scoreLabel = SKLabelNode(fontNamed: "ArialRoundedMTBold")
         scoreLabel.fontSize = 32
-        scoreLabel.fontColor = .black
+        scoreLabel.fontColor = .white
         scoreLabel.position = CGPoint(x: frame.midX, y: frame.maxY - 80)
         scoreLabel.zPosition = 10
         scoreLabel.text = "Шагов: 0 / \(targetSteps)"

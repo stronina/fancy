@@ -8,6 +8,7 @@ struct ChickenGameWrapperView: View {
     // MARK: – Game State
     @State private var gameState: ChickenGameFlowState = .ready
     @State private var gameID = UUID()
+    @State private var stepCount = 0
     @Environment(\.dismiss) private var dismiss
 
     // MARK: – Theme Colors
@@ -16,10 +17,15 @@ struct ChickenGameWrapperView: View {
 
     var body: some View {
         ZStack {
+            Image("bg_hills_sky")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
             GeometryReader { geometry in
                 ChickenGameView(
                     size: geometry.size,
-                    gameState: $gameState
+                    gameState: $gameState,
+                    stepCount: $stepCount
                 )
                 .id(gameID)
             }
@@ -37,7 +43,13 @@ struct ChickenGameWrapperView: View {
 
                 case .playing:
                     HStack {
+                        Text("Шагов: \(stepCount) / 100")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding(.leading)
+
                         Spacer()
+
                         Button {
                             dismiss()
                         } label: {
