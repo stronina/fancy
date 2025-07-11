@@ -103,7 +103,8 @@ struct BugInstructionView: View {
                     .foregroundColor(.white)
 
                 VStack(spacing: 15) {
-                    Text("🎯 Цель: собери 100 сердечек")
+                    // Level uses 10 hearts in game logic
+                    Text("🎯 Цель: собери 10 сердечек")
                     Text("👆 Управление: тяни жука пальцем")
                     Text("⚠️ Избегай злых куриц!")
                 }

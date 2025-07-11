@@ -139,7 +139,8 @@ class BugGameScene: SKScene, SKPhysicsContactDelegate {
 
     func spawnRandomFallingThing() {
         let isHeart = Bool.random()
-        let textureName = isHeart ? ["heart_1", "heart_2"].randomElement()! : "enemy"
+        // Use only existing heart asset to avoid missing texture crash
+        let textureName = isHeart ? "heart_1" : "enemy"
         let node = SKSpriteNode(imageNamed: textureName)
         
         // Одинаковый размер для всех падающих объектов
