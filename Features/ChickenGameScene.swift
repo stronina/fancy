@@ -104,11 +104,12 @@ class ChickenGameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         guard isGameRunning else { return }
-        
+        if hasReachedCenter {
+            chicken.position.x = frame.midX // На всякий случай фиксируем
+        }
         if chicken.position.y < frame.minY - 100 {
             triggerGameOver()
         }
-        
         let referenceX = hasReachedCenter ? frame.midX - worldNode.position.x : chicken.position.x
         while lastTileX < referenceX + frame.width {
             spawnBridgeTile(at: lastTileX)
@@ -191,8 +192,13 @@ class ChickenGameScene: SKScene {
     func moveForward(by distance: CGFloat) {
         if !hasReachedCenter {
             chicken.position.x += distance
+            if chicken.position.x >= frame.midX {
+                hasReachedCenter = true
+                chicken.position.x = frame.midX // Фиксируем курицу в центре
+            }
         } else {
             worldNode.position.x -= distance
+            chicken.position.x = frame.midX // Держим курицу в центре всегда
         }
     }
     
