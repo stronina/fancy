@@ -14,7 +14,8 @@ class BugGameScene: SKScene, SKPhysicsContactDelegate {
 
     private var score = 0
     private var lives = 3
-    private let targetScore = 10
+    /// Number of hearts required to win. Should match the UI instructions.
+    private let targetScore = 100
 
     private var hasStarted = false
     var onGameOver: ((Bool) -> Void)?
